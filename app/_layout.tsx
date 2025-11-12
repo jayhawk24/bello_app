@@ -66,7 +66,7 @@ export default function RootLayout() {
     <AuthProvider>
       <ThemeProvider value={navTheme}>
         <SafeAreaProvider>
-          <SafeAreaView style={{ flex: 1, backgroundColor: colors.surface.background }} edges={["top", "left", "right", "bottom"]}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: colors.surface.background }} edges={["left", "right", "bottom"]}>
             <Stack
               screenOptions={{
                 headerShown: true,
@@ -77,9 +77,7 @@ export default function RootLayout() {
                 ),
               }}
             >
-              {/* Hide the parent header for the tabs group so we don't see "(tabs)" */}
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              {/* Hide headers on auth screens */}
               <Stack.Screen name="login" options={{ headerShown: false }} />
               <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
               <Stack.Screen name="dashboard/index" options={{ title: 'Dashboard' }} />
