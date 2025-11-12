@@ -63,7 +63,6 @@ export default function RootLayout() {
       <ThemeProvider value={navTheme}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           <Stack.Screen name="login" />
           <Stack.Screen name="dashboard/index" />
           <Stack.Screen name="requests/[id]" />

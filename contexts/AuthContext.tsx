@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return;
         }
         if (user && isPublic) {
-            router.replace('/dashboard');
+            router.replace('/');
         }
     }, [segments, user, loading]);
 
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     await registerDeviceToken(token, 'android');
                 }
             } catch { }
-            router.replace('/dashboard');
+            router.replace('/');
         } finally { setLoading(false); }
     };
 

@@ -12,12 +12,17 @@ import { colors, spacing } from '@/theme/tokens';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Badge } from '@/components/ui/Badge';
 import Container from '@/components/ui/Container';
+import * as WebBrowser from 'expo-web-browser';
+import { CONFIG } from '@/constants/config';
 
 export default function DashboardScreen() {
     const { user, logout } = useAuth();
     const [requests, setRequests] = useState<ServiceRequest[]>([]);
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const isAdmin = user?.role === 'hotel_admin';
+
+    const openWeb = (path: string) => WebBrowser.openBrowserAsync(`${CONFIG.WEB_BASE}${path}`);
 
     const load = async () => {
         setLoading(true);
@@ -41,8 +46,98 @@ export default function DashboardScreen() {
         <LinearGradient colors={["#fffbeb", "#fef3c7"]} style={styles.gradient}>
             <ScrollView style={styles.scroll} contentContainerStyle={{ paddingVertical: spacing.xl }}>
                 <Container>
-                    <Text variant="title" style={styles.heading}>Welcome {user?.role}</Text>
-                    <View style={{ height: spacing.sm }} />
+                    {/* Hero */}
+                    <Text variant="title" style={styles.heading}>Welcome to Your Dashboard! 🎉</Text>
+                    <Text variant="body" color={colors.text.secondary} style={{ marginBottom: spacing.lg }}>
+                        {isAdmin
+                            ? 'Manage your hotel and provide excellent guest experiences.'
+                            : 'Help guests with their service requests at your hotel.'}
+                    </Text>
+
+                    {/* Dashboard Cards */}
+                    <View style={{ gap: spacing.md }}>
+                        {isAdmin && (
+                            <Card>
+                                <Text variant="subtitle">🏨 Hotel Profile</Text>
+                                <Text color={colors.text.secondary}>Setup your hotel details</Text>
+                                <View style={{ height: spacing.sm }} />
+                                <Button title="Manage Hotel" onPress={() => openWeb('/dashboard/hotel')} />
+                            </Card>
+                        )}
+
+                        <Card>
+                            <Text variant="subtitle">🛏️ Rooms & QR Codes</Text>
+                            <Text color={colors.text.secondary}>
+                                {isAdmin ? 'Configure rooms and generate QR codes for guests' : 'View rooms and download QR codes for guest access'}
+                            </Text>
+                            <View style={{ height: spacing.sm }} />
+                            <Button title={isAdmin ? 'Manage Rooms' : 'View Rooms'} onPress={() => openWeb('/dashboard/rooms')} />
+                        </Card>
+
+                        <Card>
+                            <Text variant="subtitle">📋 Service Requests</Text>
+                            <Text color={colors.text.secondary}>View and manage incoming guest service requests</Text>
+                            <View style={{ height: spacing.sm }} />
+                            <Button title="View Requests" onPress={() => load()} />
+                        </Card>
+
+                        {isAdmin && (
+                            <>
+                                <Card>
+                                    <Text variant="subtitle">🛎️ Services Management</Text>
+                                    <Text color={colors.text.secondary}>Configure services offered to your guests</Text>
+                                    <View style={{ height: spacing.sm }} />
+                                    <Button title="Manage Services" onPress={() => openWeb('/dashboard/services')} />
+                                </Card>
+                                <Card>
+                                    <Text variant="subtitle">👥 Staff Management</Text>
+                                    <Text color={colors.text.secondary}>Add and manage your hotel staff members</Text>
+                                    <View style={{ height: spacing.sm }} />
+                                    <Button title="Manage Staff" onPress={() => openWeb('/dashboard/staff')} />
+                                </Card>
+                            </>
+                        )}
+                    </View>
+
+                    {/* Quick Stats */}
+                    <Text variant="subtitle" style={styles.sectionTitle}>Quick Stats</Text>
+                    <View style={{ gap: spacing.md }}>
+                        <Card>
+                            <Text variant="title" color={colors.brand.accent}>0</Text>
+                            <Text color={colors.text.secondary}>Total Rooms</Text>
+                        </Card>
+                        <Card>
+                            <Text variant="title" color={colors.brand.primary}>{requests.filter(r => r.status !== 'completed').length}</Text>
+                            <Text color={colors.text.secondary}>Active Requests</Text>
+                        </Card>
+                        <Card>
+                            <Text variant="title" color={colors.brand.success || colors.brand.accent}>0</Text>
+                            <Text color={colors.text.secondary}>Staff Members</Text>
+                        </Card>
+                        <Card>
+                            <Text variant="title" color={colors.brand.warning || colors.brand.accent}>N/A</Text>
+                            <Text color={colors.text.secondary}>Current Plan</Text>
+                        </Card>
+                    </View>
+
+                    {/* Getting Started */}
+                    <Text variant="subtitle" style={styles.sectionTitle}>🚀 Getting Started</Text>
+                    <View style={{ gap: spacing.md }}>
+                        <Card>
+                            <Text variant="subtitle">🏨 Complete Hotel Setup</Text>
+                            <Text color={colors.text.secondary}>Add your hotel details, address, and contact information.</Text>
+                            <View style={{ height: spacing.sm }} />
+                            <Button title="Complete Setup" onPress={() => openWeb('/dashboard/hotel/setup')} />
+                        </Card>
+                        <Card>
+                            <Text variant="subtitle">🛏️ Add Rooms</Text>
+                            <Text color={colors.text.secondary}>Configure your rooms and generate QR codes for guest access.</Text>
+                            <View style={{ height: spacing.sm }} />
+                            <Button title="Add Rooms" onPress={() => openWeb('/dashboard/rooms/add')} />
+                        </Card>
+                    </View>
+
+                    <View style={{ height: spacing.lg }} />
                     <Button title="Refresh" onPress={load} />
                     <Text variant="subtitle" style={styles.sectionTitle}>Service Requests</Text>
                     {loading && <Text>Loading...</Text>}
