@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Container from '@/components/ui/Container';
 import { Text } from '@/components/ui/Text';
@@ -11,6 +11,7 @@ import { Link } from 'expo-router';
 import { fetchRooms, Room } from '@/api/rooms';
 import Badge from '@/components/ui/Badge';
 import { useAuth } from '@/contexts/AuthContext';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function RequestsTab() {
     const { user } = useAuth();
@@ -22,6 +23,9 @@ export default function RequestsTab() {
     const [selectedPriority, setSelectedPriority] = useState<string>('');
     const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
     const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
+    const [filtersOpen, setFiltersOpen] = useState(false);
+    const [draftStatus, setDraftStatus] = useState<string>('');
+    const [draftPriority, setDraftPriority] = useState<string>('');
 
     const load = async () => {
         setLoading(true);
@@ -114,7 +118,21 @@ export default function RequestsTab() {
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             >
                 <Container>
-                    <Text variant="title" style={styles.heading}>Service Requests</Text>
+                    <View style={styles.headerRow}>
+                        <Text variant="title">Service Requests</Text>
+                        <Pressable
+                            accessibilityRole="button"
+                            onPress={() => {
+                                setDraftStatus(selectedStatus);
+                                setDraftPriority(selectedPriority);
+                                setFiltersOpen(true);
+                            }}
+                            style={styles.filterTrigger}
+                        >
+                            <MaterialIcons name="tune" size={18} color={colors.text.primary} />
+                            <Text style={{ marginLeft: 6 }}>Filters</Text>
+                        </Pressable>
+                    </View>
 
                     {/* Stats */}
                     <View style={styles.grid}>
@@ -135,51 +153,6 @@ export default function RequestsTab() {
                             <Text variant="hero" color={colors.brand.accent}>{counts.rooms}</Text>
                         </Card>
                     </View>
-
-                    {/* Filters */}
-                    <Card style={{ marginBottom: spacing.lg }}>
-                        <Text variant="subtitle" style={{ marginBottom: spacing.sm }}>Filters</Text>
-                        <View style={styles.filtersRow}>
-                            <View style={styles.filterGroup}>
-                                <Text variant="caption" style={styles.filterLabel}>Status</Text>
-                                <View style={styles.pillRow}>
-                                    {[
-                                        { key: '', label: 'All' },
-                                        { key: 'pending', label: 'Pending' },
-                                        { key: 'in_progress', label: 'In Progress' },
-                                        { key: 'completed', label: 'Completed' }
-                                    ].map(opt => (
-                                        <Button
-                                            key={opt.key}
-                                            title={opt.label}
-                                            color={selectedStatus === opt.key ? colors.brand.primary : colors.surface.border}
-                                            onPress={() => setSelectedStatus(opt.key)}
-                                            style={styles.pill}
-                                        />
-                                    ))}
-                                </View>
-                            </View>
-                            <View style={styles.filterGroup}>
-                                <Text variant="caption" style={styles.filterLabel}>Priority</Text>
-                                <View style={styles.pillRow}>
-                                    {[
-                                        { key: '', label: 'All' },
-                                        { key: 'high', label: 'High' },
-                                        { key: 'medium', label: 'Medium' },
-                                        { key: 'low', label: 'Low' }
-                                    ].map(opt => (
-                                        <Button
-                                            key={opt.key}
-                                            title={opt.label}
-                                            color={selectedPriority === opt.key ? colors.brand.primary : colors.surface.border}
-                                            onPress={() => setSelectedPriority(opt.key)}
-                                            style={styles.pill}
-                                        />
-                                    ))}
-                                </View>
-                            </View>
-                        </View>
-                    </Card>
 
                     {/* Requests list */}
                     {loading && <Text>Loading...</Text>}
@@ -233,6 +206,87 @@ export default function RequestsTab() {
                     ))}
                 </Container>
             </ScrollView>
+
+            {/* Filters Modal */}
+            <Modal
+                visible={filtersOpen}
+                animationType="fade"
+                transparent
+                onRequestClose={() => setFiltersOpen(false)}
+            >
+                <View style={styles.modalRoot}>
+                    <Pressable style={styles.modalBackdrop} onPress={() => setFiltersOpen(false)} />
+                    <View style={styles.modalCenter}>
+                        <Card style={styles.modalCard}>
+                            <Text variant="title" style={{ marginBottom: spacing.sm }}>Filters</Text>
+                            <View style={styles.filtersRow}>
+                                <View style={styles.filterGroup}>
+                                    <Text variant="subtitle" style={styles.filterLabel}>Status</Text>
+                                    <View style={styles.pillRow}>
+                                        {[
+                                            { key: '', label: 'All' },
+                                            { key: 'pending', label: 'Pending' },
+                                            { key: 'in_progress', label: 'In Progress' },
+                                            { key: 'completed', label: 'Completed' }
+                                        ].map(opt => (
+                                            <Button
+                                                key={opt.key}
+                                                title={opt.label}
+                                                color={draftStatus === opt.key ? colors.brand.primary : colors.surface.border}
+                                                onPress={() => setDraftStatus(opt.key)}
+                                                style={styles.pill}
+                                            />
+                                        ))}
+                                    </View>
+                                </View>
+                                <View style={styles.filterGroup}>
+                                    <Text variant="subtitle" style={styles.filterLabel}>Priority</Text>
+                                    <View style={styles.pillRow}>
+                                        {[
+                                            { key: '', label: 'All' },
+                                            { key: 'high', label: 'High' },
+                                            { key: 'medium', label: 'Medium' },
+                                            { key: 'low', label: 'Low' }
+                                        ].map(opt => (
+                                            <Button
+                                                key={opt.key}
+                                                title={opt.label}
+                                                color={draftPriority === opt.key ? colors.brand.primary : colors.surface.border}
+                                                onPress={() => setDraftPriority(opt.key)}
+                                                style={styles.pill}
+                                            />
+                                        ))}
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={[styles.rowBetween, { marginTop: spacing.md }]}>
+                                <Button
+                                    title="Reset"
+                                    color={colors.brand.warning}
+                                    onPress={() => {
+                                        setDraftStatus('');
+                                        setDraftPriority('');
+                                        setSelectedStatus('');
+                                        setSelectedPriority('');
+                                        setFiltersOpen(false);
+                                    }}
+                                />
+                                <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+                                    <Button
+                                        title="Apply"
+                                        color={colors.brand.primary}
+                                        onPress={() => {
+                                            setSelectedStatus(draftStatus);
+                                            setSelectedPriority(draftPriority);
+                                            setFiltersOpen(false);
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                        </Card>
+                    </View>
+                </View>
+            </Modal>
         </LinearGradient>
     );
 }
@@ -245,6 +299,22 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         gap: spacing.md,
         marginBottom: spacing.lg
+    },
+    headerRow: {
+        marginBottom: spacing.md,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    filterTrigger: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: spacing.md,
+        paddingVertical: spacing.sm,
+        borderRadius: 999,
+        borderWidth: 1,
+        borderColor: colors.surface.border,
+        backgroundColor: colors.surface.card
     },
     statCard: {
         flexBasis: '48%'
@@ -265,5 +335,22 @@ const styles = StyleSheet.create({
     },
     pill: {
         marginRight: 0
+    },
+    modalBackdrop: {
+        ...StyleSheet.absoluteFillObject as any,
+        backgroundColor: 'rgba(0,0,0,0.4)'
+    },
+    modalCard: {
+        width: '100%'
+    },
+    modalRoot: {
+        flex: 1,
+        position: 'relative'
+    },
+    modalCenter: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: spacing.lg
     }
 });
