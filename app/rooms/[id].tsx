@@ -99,7 +99,7 @@ export default function RoomDetailsScreen() {
                             )}
 
                             {/* Branded QR opens in browser (for print) */}
-                            <Button title="🖨️ Open Branded QR (Print)" onPress={openBrandedQr} />
+                            {/* <Button title="🖨️ Open Branded QR (Print)" onPress={openBrandedQr} /> */}
 
                             <Button title="Back to Rooms" onPress={() => router.replace('/rooms')} />
                         </View>

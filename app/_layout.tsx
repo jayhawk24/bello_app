@@ -11,6 +11,9 @@ import { colors } from '@/theme/tokens';
 import { useFonts as useRaleway, Raleway_700Bold } from '@expo-google-fonts/raleway';
 import { useFonts as useMontserrat, Montserrat_400Regular, Montserrat_500Medium } from '@expo-google-fonts/montserrat';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Pressable } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { router } from 'expo-router';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -64,14 +67,30 @@ export default function RootLayout() {
       <ThemeProvider value={navTheme}>
         <SafeAreaProvider>
           <SafeAreaView style={{ flex: 1, backgroundColor: colors.surface.background }} edges={["top", "left", "right", "bottom"]}>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="login" />
-              <Stack.Screen name="dashboard/index" />
-              <Stack.Screen name="requests/[id]" />
-              <Stack.Screen name="subscription" />
-              <Stack.Screen name="hotel/index" />
-              <Stack.Screen name="hotel/edit" />
+            <Stack
+              screenOptions={{
+                headerShown: true,
+                headerRight: () => (
+                  <Pressable accessibilityRole="button" onPress={() => router.push('/notifications')} style={{ paddingHorizontal: 8 }} hitSlop={8}>
+                    <MaterialIcons name="notifications" size={22} color={colors.text.primary} />
+                  </Pressable>
+                ),
+              }}
+            >
+              {/* Hide the parent header for the tabs group so we don't see "(tabs)" */}
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              {/* Hide headers on auth screens */}
+              <Stack.Screen name="login" options={{ headerShown: false }} />
+              <Stack.Screen name="forgot-password" options={{ headerShown: false }} />
+              <Stack.Screen name="dashboard/index" options={{ title: 'Dashboard' }} />
+              <Stack.Screen name="requests/[id]" options={{ title: 'Request Details' }} />
+              <Stack.Screen name="subscription" options={{ title: 'Subscription' }} />
+              <Stack.Screen name="hotel/index" options={{ title: 'Hotel' }} />
+              <Stack.Screen name="hotel/edit" options={{ title: 'Edit Hotel' }} />
+              <Stack.Screen name="rooms/index" options={{ title: 'Rooms' }} />
+              <Stack.Screen name="rooms/[id]" options={{ title: 'Room Details' }} />
+              <Stack.Screen name="rooms/add" options={{ title: 'Add Room' }} />
+              <Stack.Screen name="notifications/index" options={{ title: 'Notifications' }} />
             </Stack>
             <StatusBar style="auto" />
           </SafeAreaView>

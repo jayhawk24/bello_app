@@ -47,7 +47,6 @@ export default function DashboardScreen() {
             <ScrollView style={styles.scroll} contentContainerStyle={{ paddingVertical: spacing.xl }}>
                 <Container>
                     {/* Hero */}
-                    <Text variant="hero" style={styles.heading}>Welcome to Your Dashboard! 🎉</Text>
                     <Text variant="body" color={colors.text.secondary} style={{ marginBottom: spacing.lg }}>
                         {isAdmin
                             ? 'Manage your hotel and provide excellent guest experiences.'

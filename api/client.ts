@@ -40,9 +40,20 @@ async function request<T>(
             const refreshed = await tryRefresh();
             if (refreshed) return request<T>(method, path, body, false);
         }
-        // Fallthrough to throw
-        const msg = errBody?.error || `HTTP 401`;
-        throw new Error(msg);
+        // Fallthrough to throw - standardize user-friendly messaging
+        if (errBody?.error === "token_expired") {
+            await clearTokens();
+            const e: any = new Error(
+                "Your session expired. Please sign in again."
+            );
+            e.code = "token_expired";
+            e.status = 401;
+            throw e;
+        }
+        const e: any = new Error("Unauthorized request. Please try again.");
+        e.code = errBody?.error || "unauthorized";
+        e.status = 401;
+        throw e;
     }
 
     if (!res.ok) {
