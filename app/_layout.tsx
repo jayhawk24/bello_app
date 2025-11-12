@@ -61,15 +61,15 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ThemeProvider value={navTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-          <Stack.Screen name="login" options={{ title: 'Login' }} />
-          <Stack.Screen name="dashboard/index" options={{ title: 'Dashboard' }} />
-          <Stack.Screen name="requests/[id]" options={{ title: 'Request' }} />
-          <Stack.Screen name="subscription" options={{ title: 'Subscription' }} />
-          <Stack.Screen name="hotel/index" options={{ title: 'Hotel Info' }} />
-          <Stack.Screen name="hotel/edit" options={{ title: 'Edit Hotel' }} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="dashboard/index" />
+          <Stack.Screen name="requests/[id]" />
+          <Stack.Screen name="subscription" />
+          <Stack.Screen name="hotel/index" />
+          <Stack.Screen name="hotel/edit" />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

@@ -7,6 +7,7 @@ import { colors, spacing } from '@/theme/tokens';
 import { Input } from '@/components/ui/Input';
 import { LinearGradient } from 'expo-linear-gradient';
 import Container from '@/components/ui/Container';
+import { View as RNView } from 'react-native';
 
 export default function LoginScreen() {
     const { loginUser, loading } = useAuth();
@@ -24,13 +25,17 @@ export default function LoginScreen() {
     };
 
     return (
-        <LinearGradient colors={["#fffbeb", "#fef3c7"]} style={{ flex: 1 }}>
-            <Container style={styles.container}>
-                <Text variant="title" style={styles.title}>Bello Staff/Admin Login</Text>
+        <LinearGradient colors={["#fefce8", "#fef3c7"]} style={{ flex: 1 }}>
+            <Container style={styles.outer}>
+                <RNView style={styles.logoCircle}>
+                    <Text variant="title" color={colors.text.inverse} style={{ textAlign: 'center' }}>🏨</Text>
+                </RNView>
+                <Text variant="title" style={styles.heading}>Welcome Back</Text>
+                <Text variant="body" color={colors.text.secondary} style={styles.subheading}>Sign in to your account</Text>
                 {error && <Text variant="body" color={colors.brand.danger} style={styles.error}>{error}</Text>}
                 <Input
-                    label="Email"
-                    placeholder="Email"
+                    label="Email Address"
+                    placeholder="hotel@example.com"
                     value={email}
                     onChangeText={setEmail}
                     autoCapitalize="none"
@@ -39,24 +44,44 @@ export default function LoginScreen() {
                 />
                 <Input
                     label="Password"
-                    placeholder="Password"
+                    placeholder="••••••••"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
                 />
+                <View style={styles.inlineBetween}>
+                    <Text variant="caption" color={colors.text.secondary}>Remember me</Text>
+                    <Text variant="caption" color={colors.brand.primary}>Forgot password?</Text>
+                </View>
                 <Button
-                    title={loading ? 'Loading...' : 'Login'}
+                    title={loading ? '🔄 Signing in...' : '🔑 Sign In'}
                     onPress={submit}
                     disabled={loading || !email || !password}
                 />
+                <View style={{ height: spacing.lg }} />
+                <Text variant="body" color={colors.text.secondary} style={{ textAlign: 'center', marginBottom: spacing.sm }}>New to Bello?</Text>
+                <Button title="🏨 Create Hotel Account" color={colors.brand.accent} onPress={() => { }} />
+                <View style={styles.divider} />
             </Container>
         </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center' },
-    title: { marginBottom: spacing.lg, color: colors.text.primary },
-    input: {},
-    error: { marginBottom: spacing.md }
+    outer: { flex: 1, justifyContent: 'center' },
+    logoCircle: {
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        backgroundColor: colors.brand.accent,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginBottom: spacing.md,
+    },
+    heading: { textAlign: 'center', marginBottom: spacing.xs, color: colors.text.primary },
+    subheading: { textAlign: 'center', marginBottom: spacing.lg },
+    inlineBetween: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
+    divider: { marginTop: spacing.lg, paddingTop: spacing.lg, borderTopWidth: 1, borderTopColor: colors.surface.border },
+    error: { marginBottom: spacing.md },
 });
