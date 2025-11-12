@@ -5,6 +5,8 @@ import { Text } from '@/components/ui/Text';
 import { Button } from '@/components/ui/Button';
 import { colors, spacing } from '@/theme/tokens';
 import { Input } from '@/components/ui/Input';
+import { LinearGradient } from 'expo-linear-gradient';
+import Container from '@/components/ui/Container';
 
 export default function LoginScreen() {
     const { loginUser, loading } = useAuth();
@@ -22,36 +24,38 @@ export default function LoginScreen() {
     };
 
     return (
-        <View style={styles.container}>
-            <Text variant="title" style={styles.title}>Bello Staff/Admin Login</Text>
-            {error && <Text variant="body" color={colors.brand.danger} style={styles.error}>{error}</Text>}
-            <Input
-                label="Email"
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
-                autoCorrect={false}
-            />
-            <Input
-                label="Password"
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <Button
-                title={loading ? 'Loading...' : 'Login'}
-                onPress={submit}
-                disabled={loading || !email || !password}
-            />
-        </View>
+        <LinearGradient colors={["#fffbeb", "#fef3c7"]} style={{ flex: 1 }}>
+            <Container style={styles.container}>
+                <Text variant="title" style={styles.title}>Bello Staff/Admin Login</Text>
+                {error && <Text variant="body" color={colors.brand.danger} style={styles.error}>{error}</Text>}
+                <Input
+                    label="Email"
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={setEmail}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    autoCorrect={false}
+                />
+                <Input
+                    label="Password"
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
+                <Button
+                    title={loading ? 'Loading...' : 'Login'}
+                    onPress={submit}
+                    disabled={loading || !email || !password}
+                />
+            </Container>
+        </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: spacing.xl, justifyContent: 'center', backgroundColor: colors.surface.background },
+    container: { flex: 1, justifyContent: 'center' },
     title: { marginBottom: spacing.lg, color: colors.text.primary },
     input: {},
     error: { marginBottom: spacing.md }

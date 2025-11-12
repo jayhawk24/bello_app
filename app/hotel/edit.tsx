@@ -5,6 +5,8 @@ import { Text } from '@/components/ui/Text';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { colors, spacing } from '@/theme/tokens';
+import { LinearGradient } from 'expo-linear-gradient';
+import Container from '@/components/ui/Container';
 
 export default function HotelInfoEditScreen() {
     const [loading, setLoading] = useState(true);
@@ -23,20 +25,22 @@ export default function HotelInfoEditScreen() {
     if (loading) return <View style={styles.container}><Text>Loading...</Text></View>;
 
     return (
-        <View style={styles.container}>
-            <Text variant="title" style={styles.title}>Edit Hotel Info</Text>
-            <Input value={form.name} onChangeText={(t) => updateField('name', t)} placeholder="Name" label="Name" />
-            <Input value={form.address} onChangeText={(t) => updateField('address', t)} placeholder="Address" label="Address" />
-            <Input value={form.city} onChangeText={(t) => updateField('city', t)} placeholder="City" label="City" />
-            <Input value={form.state} onChangeText={(t) => updateField('state', t)} placeholder="State" label="State" />
-            <Input value={form.country} onChangeText={(t) => updateField('country', t)} placeholder="Country" label="Country" />
-            <Button title={saving ? 'Saving...' : 'Save'} onPress={save} disabled={saving} />
-        </View>
+        <LinearGradient colors={["#fffbeb", "#fef3c7"]} style={{ flex: 1 }}>
+            <Container>
+                <Text variant="title" style={styles.title}>Edit Hotel Info</Text>
+                <Input value={form.name} onChangeText={(t) => updateField('name', t)} placeholder="Name" label="Name" />
+                <Input value={form.address} onChangeText={(t) => updateField('address', t)} placeholder="Address" label="Address" />
+                <Input value={form.city} onChangeText={(t) => updateField('city', t)} placeholder="City" label="City" />
+                <Input value={form.state} onChangeText={(t) => updateField('state', t)} placeholder="State" label="State" />
+                <Input value={form.country} onChangeText={(t) => updateField('country', t)} placeholder="Country" label="Country" />
+                <Button title={saving ? 'Saving...' : 'Save'} onPress={save} disabled={saving} />
+            </Container>
+        </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: spacing.xl, backgroundColor: colors.surface.background },
+    container: { flex: 1 },
     title: { marginBottom: spacing.md },
     input: {}
 });
