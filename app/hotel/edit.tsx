@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { fetchHotelProfile, updateHotelProfile } from '@/api/hotel';
+import { Text } from '@/components/ui/Text';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { colors, spacing } from '@/theme/tokens';
 
 export default function HotelInfoEditScreen() {
     const [loading, setLoading] = useState(true);
@@ -20,19 +24,19 @@ export default function HotelInfoEditScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Edit Hotel Info</Text>
-            <TextInput style={styles.input} value={form.name} onChangeText={(t) => updateField('name', t)} placeholder="Name" />
-            <TextInput style={styles.input} value={form.address} onChangeText={(t) => updateField('address', t)} placeholder="Address" />
-            <TextInput style={styles.input} value={form.city} onChangeText={(t) => updateField('city', t)} placeholder="City" />
-            <TextInput style={styles.input} value={form.state} onChangeText={(t) => updateField('state', t)} placeholder="State" />
-            <TextInput style={styles.input} value={form.country} onChangeText={(t) => updateField('country', t)} placeholder="Country" />
+            <Text variant="title" style={styles.title}>Edit Hotel Info</Text>
+            <Input value={form.name} onChangeText={(t) => updateField('name', t)} placeholder="Name" label="Name" />
+            <Input value={form.address} onChangeText={(t) => updateField('address', t)} placeholder="Address" label="Address" />
+            <Input value={form.city} onChangeText={(t) => updateField('city', t)} placeholder="City" label="City" />
+            <Input value={form.state} onChangeText={(t) => updateField('state', t)} placeholder="State" label="State" />
+            <Input value={form.country} onChangeText={(t) => updateField('country', t)} placeholder="Country" label="Country" />
             <Button title={saving ? 'Saving...' : 'Save'} onPress={save} disabled={saving} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 24, backgroundColor: '#fafafa' },
-    title: { fontSize: 20, fontWeight: '600', marginBottom: 12 },
-    input: { backgroundColor: '#fff', padding: 12, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: '#e0e0e0' }
+    container: { flex: 1, padding: spacing.xl, backgroundColor: colors.surface.background },
+    title: { marginBottom: spacing.md },
+    input: {}
 });

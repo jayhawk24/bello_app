@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { fetchRequests, updateRequestStatus, ServiceRequest } from '@/api/requests';
+import { Text } from '@/components/ui/Text';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { colors, spacing } from '@/theme/tokens';
 
 export default function RequestDetail() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -27,18 +31,19 @@ export default function RequestDetail() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{request.title}</Text>
-            <Text>Status: {request.status}</Text>
-            <Text>Priority: {request.priority}</Text>
-            <Text>Room: {request.room.roomNumber}</Text>
-            <View style={{ height: 16 }} />
+            <Text variant="title" style={styles.title}>{request.title}</Text>
+            <Card style={{ marginBottom: spacing.md }}>
+                <Text> Status: <Text color={colors.brand.primary}>{request.status}</Text></Text>
+                <Text> Priority: {request.priority}</Text>
+                <Text> Room: {request.room.roomNumber}</Text>
+            </Card>
             {request.status === 'pending' && <Button title="Start" onPress={() => updateStatus('in_progress')} />}
-            {request.status === 'in_progress' && <Button title="Complete" onPress={() => updateStatus('completed')} />}
+            {request.status === 'in_progress' && <Button title="Complete" color={colors.brand.success} onPress={() => updateStatus('completed')} />}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 24, backgroundColor: '#fafafa' },
-    title: { fontSize: 20, fontWeight: '600', marginBottom: 12 }
+    container: { flex: 1, padding: spacing.xl, backgroundColor: colors.surface.background },
+    title: { marginBottom: spacing.md }
 });

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { fetchHotelProfile } from '@/api/hotel';
 import { Link } from 'expo-router';
+import { Text } from '@/components/ui/Text';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { colors, spacing } from '@/theme/tokens';
 
 export default function HotelInfoScreen() {
     const [hotel, setHotel] = useState<any>(null);
@@ -14,10 +18,11 @@ export default function HotelInfoScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{hotel.name}</Text>
-            <Text>{hotel.address}</Text>
-            <Text>{hotel.city}, {hotel.state}, {hotel.country}</Text>
-            <View style={{ height: 16 }} />
+            <Text variant="title" style={styles.title}>{hotel.name}</Text>
+            <Card style={{ marginBottom: spacing.md }}>
+                <Text>{hotel.address}</Text>
+                <Text>{hotel.city}, {hotel.state}, {hotel.country}</Text>
+            </Card>
             <Link href="/hotel/edit" asChild>
                 <Button title="Edit" />
             </Link>
@@ -26,6 +31,6 @@ export default function HotelInfoScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 24, backgroundColor: '#fafafa' },
-    title: { fontSize: 20, fontWeight: '600', marginBottom: 8 }
+    container: { flex: 1, padding: spacing.xl, backgroundColor: colors.surface.background },
+    title: { marginBottom: spacing.sm }
 });

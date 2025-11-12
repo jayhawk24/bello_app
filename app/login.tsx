@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { Text } from '@/components/ui/Text';
 import { Button } from '@/components/ui/Button';
-import { colors, spacing, radii } from '@/theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
+import { Input } from '@/components/ui/Input';
 
 export default function LoginScreen() {
     const { loginUser, loading } = useAuth();
@@ -24,21 +25,21 @@ export default function LoginScreen() {
         <View style={styles.container}>
             <Text variant="title" style={styles.title}>Bello Staff/Admin Login</Text>
             {error && <Text variant="body" color={colors.brand.danger} style={styles.error}>{error}</Text>}
-            <TextInput
+            <Input
+                label="Email"
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
-                style={styles.input}
                 autoCapitalize="none"
-                placeholderTextColor={colors.text.secondary}
+                keyboardType="email-address"
+                autoCorrect={false}
             />
-            <TextInput
+            <Input
+                label="Password"
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
-                style={styles.input}
-                placeholderTextColor={colors.text.secondary}
             />
             <Button
                 title={loading ? 'Loading...' : 'Login'}
@@ -52,14 +53,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: { flex: 1, padding: spacing.xl, justifyContent: 'center', backgroundColor: colors.surface.background },
     title: { marginBottom: spacing.lg, color: colors.text.primary },
-    input: {
-        backgroundColor: colors.surface.card,
-        padding: spacing.md,
-        borderRadius: radii.lg,
-        marginBottom: spacing.md,
-        borderWidth: 1,
-        borderColor: colors.surface.border,
-        color: colors.text.primary,
-    },
+    input: {},
     error: { marginBottom: spacing.md }
 });
