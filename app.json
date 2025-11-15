@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "bello_app",
-        "slug": "bello_app",
+        "name": "Bello",
+        "slug": "Bello",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
@@ -15,10 +15,10 @@
         "android": {
             "package": "com.jayhawk.bello",
             "adaptiveIcon": {
-                "backgroundColor": "#E6F4FE",
-                "foregroundImage": "./assets/images/android-icon-foreground.png",
-                "backgroundImage": "./assets/images/android-icon-background.png",
-                "monochromeImage": "./assets/images/android-icon-monochrome.png"
+                "backgroundColor": "#FFFFFF",
+                "foregroundImage": "./assets/images/adaptive-icon.png",
+                "backgroundImage": "./assets/images/adaptive-icon.png",
+                "monochromeImage": "./assets/images/adaptive-icon.png"
             },
             "edgeToEdgeEnabled": true,
             "predictiveBackGestureEnabled": false
